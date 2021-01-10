@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-custom
+  labels:
+    app: nginx-custom
+  namespace: mktsvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-custom
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nginx-custom
+    spec:
+      containers:
+      - image: nginx:1.7.8
+        imagePullPolicy: Always
+        name: nginx-public
+        ports:
+        - containerPort: 80
+          protocol: TCP
+

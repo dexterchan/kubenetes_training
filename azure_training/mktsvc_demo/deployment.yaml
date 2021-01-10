@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mktsvc-emulator
+  labels:
+    app: mktsvc-emulator
+  namespace: mktsvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mktsvc-emulator
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mktsvc-emulator
+    spec:
+      containers:
+      - image: humblepigmktdatasvcemulator.azurecr.io/websocket-bpipe-emulator:v4.alpine
+        imagePullPolicy: Always
+        name: emulator-java
+        ports:
+        - containerPort: 8194
+          protocol: TCP
+
